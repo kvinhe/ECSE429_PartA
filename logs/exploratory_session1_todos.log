@@ -1,0 +1,79 @@
+$ curl -X GET http://localhost:4567/todos 
+{"todos":[{"id":"2","title":"file paperwork","doneStatus":"false","description":"","tasksof":[{"id":"1"}]},{"id":"1","title":"scan paperwork","doneStatus":"false","description":"","tasksof":[{"id":"1"}],"categories":[{"id":"1"}]}]}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {"title":"buy milk"}
+{"id":"399","title":"buy milk","doneStatus":"false","description":""}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {"title":"full","doneStatus":true,"description":"all fields"}
+{"id":"400","title":"full","doneStatus":"true","description":"all fields"}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {}
+{"errorMessages":["title : field is mandatory"]}
+  -> HTTP 400
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {"title":"x","doneStatus":"maybe"}
+{"errorMessages":["Failed Validation: doneStatus should be BOOLEAN"]}
+  -> HTTP 400
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {"title":"x","id":99}
+{"errorMessages":["Invalid Creation: Failed Validation: Not allowed to create with id"]}
+  -> HTTP 400
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {"title":"x","colour":"red"}
+{"errorMessages":["Could not find field: colour"]}
+  -> HTTP 400
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/json -d {bad json
+{"errorMessages":["com.google.gson.stream.MalformedJsonException: Expected \u0027:\u0027 at line 1 column 7 path $."]}
+  -> HTTP 400
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/xml -H Accept: application/xml -d <todo><title>from xml</title></todo>
+<todo><doneStatus>false</doneStatus><description/><id>404</id><title>from xml</title></todo>
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/todos -H Content-Type: application/xml -d <todo><title>broken</todo>
+{"errorMessages":["Mismatched title and todo at 25 [character 26 line 1]"]}
+  -> HTTP 400
+$ curl -X GET http://localhost:4567/todos/1 -H Accept: application/xml
+<todos><todo><doneStatus>false</doneStatus><description/><tasksof><id>1</id></tasksof><id>1</id><categories><id>1</id></categories><title>scan paperwork</title></todo></todos>
+  -> HTTP 200
+$ curl -X PUT http://localhost:4567/todos/1 -H Content-Type: application/json -d {"description":"only description"}
+{"errorMessages":["title : field is mandatory"]}
+  -> HTTP 400
+$ curl -X PUT http://localhost:4567/todos/1 -H Content-Type: application/json -d {"title":"scan paperwork","doneStatus":false}
+{"id":"1","title":"scan paperwork","doneStatus":"false","description":""}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/todos/1 -H Content-Type: application/json -d {"description":"amended"}
+{"id":"1","title":"scan paperwork","doneStatus":"false","description":"amended"}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/todos/1 -H Content-Type: application/json -d {"description":""}
+{"id":"1","title":"scan paperwork","doneStatus":"false","description":""}
+  -> HTTP 200
+$ curl -X GET http://localhost:4567/todos?doneStatus=false 
+{"todos":[{"id":"404","title":"from xml","doneStatus":"false","description":""},{"id":"2","title":"file paperwork","doneStatus":"false","description":"","tasksof":[{"id":"1"}]},{"id":"1","title":"scan paperwork","doneStatus":"false","description":""},{"id":"399","title":"buy milk","doneStatus":"fals
+  -> HTTP 200
+$ curl -X GET http://localhost:4567/todos?nofield=1 
+{"todos":[{"id":"400","title":"full","doneStatus":"true","description":"all fields"},{"id":"404","title":"from xml","doneStatus":"false","description":""},{"id":"2","title":"file paperwork","doneStatus":"false","description":"","tasksof":[{"id":"1"}]},{"id":"1","title":"scan paperwork","doneStatus":
+  -> HTTP 200
+$ curl -X GET http://localhost:4567/todos/987654 
+{"errorMessages":["Could not find an instance with todos/987654"]}
+  -> HTTP 404
+$ curl -X DELETE http://localhost:4567/todos/987654 
+{"errorMessages":["Could not find any instances with todos/987654"]}
+  -> HTTP 404
+$ curl -X PATCH http://localhost:4567/todos/1 
+
+  -> HTTP 405
+$ curl -X HEAD http://localhost:4567/todos -I
+HTTP/1.1 200 OK
+Date: Wed, 14 Oct 2026 19:08:17 GMT
+Content-Type: application/json
+Transfer-Encoding: chunked
+Server: Jetty(9.4.z-SNAPSHOT)
+
+
+  -> HTTP 200
+$ curl -X OPTIONS http://localhost:4567/todos -i
+HTTP/1.1 200 OK
+Date: Wed, 14 Oct 2026 19:08:18 GMT
+Allow: OPTIONS, GET, HEAD, POST
+Content-Type: text/html;charset=utf-8
+Transfer-Encoding: chunked
+Server: Jetty(9.4.z-SNAPSHOT)
+
+
+  -> HTTP 200

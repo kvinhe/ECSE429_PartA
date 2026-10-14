@@ -1,0 +1,3 @@
+FAILED tests/test_bugs_expected_behavior.py::test_deleting_todo_removes_it_from_category_todos
+FAILED tests/test_bugs_expected_behavior.py::test_xml_relationship_creation_succeeds
+14 failed, 171 deselected in 0.37s

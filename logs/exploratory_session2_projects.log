@@ -1,0 +1,54 @@
+$ curl -X GET http://localhost:4567/projects 
+{"projects":[{"id":"1","title":"Office Work","completed":"false","active":"false","description":"","tasks":[{"id":"2"}]}]}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/projects -H Content-Type: application/json -d {"title":"thesis"}
+{"id":"202","title":"thesis","completed":"false","active":"false","description":""}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/projects -H Content-Type: application/json -d {"title":"launch","completed":true,"active":true,"description":"q4"}
+{"id":"203","title":"launch","completed":"true","active":"true","description":"q4"}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/projects -H Content-Type: application/json -d {"description":"no title"}
+{"id":"204","title":"","completed":"false","active":"false","description":"no title"}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/projects -H Content-Type: application/json -d {"title":"x","completed":"yes"}
+{"errorMessages":["Failed Validation: completed should be BOOLEAN"]}
+  -> HTTP 400
+$ curl -X GET http://localhost:4567/projects/1 
+{"projects":[{"id":"1","title":"Office Work","completed":"false","active":"false","description":"","tasks":[{"id":"2"}]}]}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/projects/1 -H Content-Type: application/json -d {"active":true}
+{"id":"1","title":"Office Work","completed":"false","active":"true","description":"","tasks":[{"id":"2"}]}
+  -> HTTP 200
+$ curl -X PUT http://localhost:4567/projects/1 -H Content-Type: application/json -d {"title":"Office Work"}
+{"id":"1","title":"Office Work","completed":"false","active":"false","description":""}
+  -> HTTP 200
+$ curl -X GET http://localhost:4567/projects/1/tasks 
+{"todos":[]}
+  -> HTTP 200
+$ curl -X POST http://localhost:4567/projects/1/tasks -H Content-Type: application/json -d {"title":"todo created under project"}
+{"id":"405","title":"todo created under project","doneStatus":"false","description":"","tasksof":[{"id":"1"}]}
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/projects/1/tasks -H Content-Type: application/json -d {"id":"1"}
+
+  -> HTTP 201
+$ curl -X POST http://localhost:4567/projects/1/tasks -H Content-Type: application/json -d {"id":"987654"}
+{"errorMessages":["Could not find thing matching value for id"]}
+  -> HTTP 404
+$ curl -X GET http://localhost:4567/projects/987654/tasks 
+{"todos":[{"id":"1","title":"scan paperwork","doneStatus":"false","description":"","tasksof":[{"id":"1"}]},{"id":"405","title":"todo created under project","doneStatus":"false","description":"","tasksof":[{"id":"1"}]}]}
+  -> HTTP 200
+$ curl -X DELETE http://localhost:4567/projects/1/tasks/1 
+
+  -> HTTP 200
+$ curl -X DELETE http://localhost:4567/projects/1/tasks/1 
+{"errorMessages":["Could not find any instances with projects/1/tasks/1"]}
+  -> HTTP 404
+$ curl -X GET http://localhost:4567/projects/1/tasks/1 
+
+  -> HTTP 404
+$ curl -X DELETE http://localhost:4567/projects/987654 
+{"errorMessages":["Could not find any instances with projects/987654"]}
+  -> HTTP 404
+$ curl -X GET http://localhost:4567/projects?title=thesis 
+{"projects":[{"id":"202","title":"thesis","completed":"false","active":"false","description":""}]}
+  -> HTTP 200
