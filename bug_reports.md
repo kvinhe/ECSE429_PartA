@@ -28,16 +28,16 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 
 **Test:** `test_todo_lists_category_linked_from_category_side`
 
-## BUG-03: Project->category link is not visible from GET /categories/:id/projects
+## BUG-03: Project<->category link is visible only from the side that created it
 
-**Description:** POST /projects/:id/categories is stored one way only.
+**Description:** Links made from either side (POST /projects/:id/categories or POST /categories/:id/projects) are stored one way only.
 
-**Potential impact:** Category cannot list its projects.
+**Potential impact:** A category cannot list its projects, and a project cannot list its categories.
 
 **Steps to reproduce:**
-1. Create project P and category C
-2. POST /projects/P/categories {"id":"C"} -> 201
-3. GET /categories/C/projects -> empty (expected P)
+1. Create project P and category C; POST /projects/P/categories {"id":"C"} -> 201
+2. GET /categories/C/projects -> empty (expected P)
+3. Mirror: POST /categories/C/projects {"id":"P"} -> 201; GET /projects/P/categories -> empty (expected C)
 
 **Test:** `test_category_lists_project_linked_from_project_side`
 

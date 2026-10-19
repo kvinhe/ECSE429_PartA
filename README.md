@@ -33,8 +33,8 @@
   (4.1 findings + bug table, 4.2 concerns / areas of potential risk,
   4.3 new testing ideas). The teacher-template information is contained
   within these PDFs themselves; there are no separate spreadsheet files.
-  (The report's deliverables list calls these "Part_A_Session_Notes.pdf";
-  they are the same notes, filed per charter.)
+- `PartA_UnitTests_Video.mp4` — screen recording of the full suite: default
+  order, seeds 7 and 31337, and a service-down run (recorded on macOS)
 - `bug_reports.md` — bug form + 12 bug reports (BUG-01 … BUG-12)
 - `tests/` — pytest unit test suite (12 modules, 185 tests)
 - `exploratory/` — curl capability scripts for the 4 sessions (+ `common.sh`)
@@ -71,4 +71,4 @@ Set `TODO_API_URL` to test another host/port.
 
 **Expected result:** 171 passed, 14 xfailed
 (14 expected-behaviour checks covering 12 distinct bugs; verified 2026-10-14
-against a fresh server in default order and with seeds 7 and 999).
+against a fresh server in default order and with seeds 7, 31337 and 20261014).
