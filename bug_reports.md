@@ -13,7 +13,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. POST /todos/T/categories {"id":"C"} -> 201
 3. GET /categories/C/todos -> {"todos":[]} (expected T)
 
-**Test:** `test_bugs_expected_behavior.py::test_category_lists_todo_linked_from_todo_side`
+**Tests:** expected `test_category_lists_todo_linked_from_todo_side` · actual `test_bug01_category_does_not_list_todo_linked_from_todo_side`
 
 ## BUG-02: Category->todo link is not visible from GET /todos/:id/categories
 
@@ -26,7 +26,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. POST /categories/C/todos {"id":"T"} -> 201
 3. GET /todos/T/categories -> empty (expected C)
 
-**Test:** `test_todo_lists_category_linked_from_category_side`
+**Tests:** expected `test_todo_lists_category_linked_from_category_side` · actual `test_bug02_todo_does_not_list_category_linked_from_category_side`
 
 ## BUG-03: Project<->category link is visible only from the side that created it
 
@@ -39,7 +39,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. GET /categories/C/projects -> empty (expected P)
 3. Mirror: POST /categories/C/projects {"id":"P"} -> 201; GET /projects/P/categories -> empty (expected C)
 
-**Test:** `test_category_lists_project_linked_from_project_side`
+**Tests:** expected `test_category_lists_project_linked_from_project_side` · actual `test_bug03_category_does_not_list_project_linked_from_project_side`
 
 ## BUG-04: GET on relationship of a nonexistent parent returns 200 with other data
 
@@ -51,7 +51,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 1. Link any todo to a category
 2. GET /todos/987654/categories -> 200 containing that category (expected 404)
 
-**Test:** `test_relationship_of_missing_parent_returns_404`
+**Tests:** expected `test_relationship_of_missing_parent_returns_404` · actual `test_bug04_missing_parent_relationship_returns_200_with_unrelated_data`
 
 ## BUG-05: PUT /todos/:id requires title although docs say 'fields to amend'
 
@@ -63,11 +63,11 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 1. Create todo
 2. PUT /todos/ID {"description":"only"} -> 400 'title : field is mandatory' (expected 200)
 
-**Test:** `test_put_todo_with_only_description_succeeds`
+**Tests:** expected `test_put_todo_with_only_description_succeeds` · actual `test_bug05_put_with_only_description_is_rejected_for_missing_title`
 
 ## BUG-06: doneStatus returned as string but string input is rejected
 
-**Description:** Responses contain "doneStatus":"true" yet sending "true" (string) gives 400 'should be BOOLEAN'; only JSON true works.
+**Description:** Responses contain "doneStatus":"false" yet sending "false" (string) gives 400 'should be BOOLEAN'; only JSON false works.
 
 **Potential impact:** Round-tripping a GET response into a PUT/POST fails; typing is inconsistent.
 
@@ -75,7 +75,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 1. GET /todos/1 -> doneStatus "false"
 2. PUT /todos/1 {"title":"x","doneStatus":"false"} -> 400 (expected 200)
 
-**Test:** `test_returned_done_status_can_be_sent_back`
+**Tests:** expected `test_returned_done_status_can_be_sent_back` · actual `test_bug06_string_done_status_is_rejected_but_boolean_is_accepted`
 
 ## BUG-07: Failed (400) creations still consume object ids
 
@@ -88,7 +88,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. Send two invalid POSTs (empty title, bad doneStatus)
 3. Create todo -> id N+3 (expected N+1)
 
-**Test:** `test_failed_creation_does_not_consume_an_id`
+**Tests:** expected `test_failed_creation_does_not_consume_an_id` · actual `test_bug07_failed_creations_consume_ids`
 
 ## BUG-08: GET /todos/:id/tasksof/:id returns 404, swagger documents 405
 
@@ -100,7 +100,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 1. Link todo T to project P
 2. GET /todos/T/tasksof/P -> 404 (expected 405)
 
-**Test:** `test_get_on_relationship_instance_returns_405`
+**Tests:** expected `test_get_on_relationship_instance_returns_405` · actual `test_bug08_get_on_relationship_instance_returns_404`
 
 ## BUG-09: PUT /projects/:id silently removes the project's task links
 
@@ -113,7 +113,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. PUT /projects/P {"title":"renamed"} -> 200
 3. GET /projects/P/tasks -> empty (T still exists)
 
-**Test:** `test_put_project_keeps_task_relationships`
+**Tests:** expected `test_put_project_keeps_task_relationships` · actual `test_bug09_put_project_drops_task_relationships`
 
 ## BUG-10: Deleting a category leaves a ghost link listed on the todo
 
@@ -126,7 +126,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. DELETE /categories/C -> 200
 3. GET /todos/T/categories -> still lists C (expected empty)
 
-**Test:** `test_deleting_category_removes_it_from_todo_categories`
+**Tests:** expected `test_deleting_category_removes_it_from_todo_categories` · actual `test_bug10_deleted_category_still_listed_on_todo`
 
 ## BUG-11: Deleting a todo leaves a ghost link listed on the category
 
@@ -139,7 +139,7 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 2. DELETE /todos/T -> 200
 3. GET /categories/C/todos -> still lists T (expected empty)
 
-**Test:** `test_deleting_todo_removes_it_from_category_todos`
+**Tests:** expected `test_deleting_todo_removes_it_from_category_todos` · actual `test_bug11_deleted_todo_still_listed_on_category`
 
 ## BUG-12: Relationship creation fails when the id is sent as XML
 
@@ -151,4 +151,4 @@ Form: ID | Summary (<=80 chars) | Description | Impact | Steps to reproduce | Py
 1. Create T and C
 2. POST /todos/T/categories with Content-Type application/xml body <category><id>C</id></category> -> 404 (expected 201)
 
-**Test:** `test_xml_relationship_creation_succeeds`
+**Tests:** expected `test_xml_relationship_creation_succeeds` · actual `test_bug12_xml_relationship_creation_returns_404_but_json_works`

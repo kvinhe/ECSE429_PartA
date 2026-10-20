@@ -31,8 +31,7 @@
   expected behaviour, observed response and verdict folded into the table;
   Section 3 Referenced Files; Section 4 Summary of Session Findings
   (4.1 findings + bug table, 4.2 concerns / areas of potential risk,
-  4.3 new testing ideas). The teacher-template information is contained
-  within these PDFs themselves; there are no separate spreadsheet files.
+  4.3 new testing ideas).
 - `PartA_UnitTests_Video.mp4` — screen recording of the full suite: default
   order, seeds 7 and 31337, and a service-down run (recorded on macOS)
 - `bug_reports.md` — bug form + 12 bug reports (BUG-01 … BUG-12)
@@ -42,8 +41,7 @@
   (default order, 3 seeded random orders, service-down run, raw bug failures)
 
 ## Charter evidence map
-Each charter's files, grouped the way a reader will look for them
-(session notes are filed in their own folder, `session_notes/`):
+Files for each charter:
 
 | Charter | Session notes | Capability script | Evidence log | Main follow-up tests |
 |---|---|---|---|---|
@@ -52,10 +50,8 @@ Each charter's files, grouped the way a reader will look for them
 | CH3 – Categories | `session_notes/CH3_Categories_Notes.pdf` | `exploratory/session3_categories.sh` | `logs/exploratory_session3_categories.log` | `tests/test_categories_api.py`, `tests/test_category_relationships_api.py` |
 | CH4 – Interoperability | `session_notes/CH4_Interoperability_Notes.pdf` | `exploratory/session4_interoperability.sh` | `logs/exploratory_session4_interoperability.log` | `tests/test_interoperability_api.py` |
 
-The capability scripts are the replayable equivalent of a Postman
-collection, and the logs are the per-request evidence (exact status and
-response body, in run order) in place of screenshots. Bug follow-ups for
-every charter live in `tests/test_bugs_expected_behavior.py` and
+Each log records the status and response body of every request, in run
+order. Bug follow-ups for every charter live in `tests/test_bugs_expected_behavior.py` and
 `tests/test_bugs_actual_behavior.py`, cross-referenced from `bug_reports.md`.
 
 ## Run
